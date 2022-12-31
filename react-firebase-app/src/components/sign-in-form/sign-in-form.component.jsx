@@ -10,6 +10,7 @@ import {
 } from '../../utils/firebase/firebase.utils';
 
 import './sign-in-form.styles.scss';
+// import { UserContext } from '../../context/context.user';
 
 const defaultFormFields = {
   email: '',
@@ -19,25 +20,28 @@ const defaultFormFields = {
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
-
+  // const {setCurrentUser} =useContext(UserContext)
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
+    // setCurrentUser(user)
+    // await createUserDocumentFromAuth(user);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await signInAuthUserWithEmailAndPassword(
+      const {user} = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      console.log(response);
+
+      console.log(user,"userin sign component");
+      // setCurrentUser(user)
       resetFormFields();
     } catch (error) {
       switch (error.code) {
